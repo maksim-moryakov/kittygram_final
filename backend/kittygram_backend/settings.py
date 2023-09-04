@@ -4,16 +4,13 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
-
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'my_secret_key')
 
-DEBUG = os.getenv('DEBUG', 'False') == 'True'
+DEBUG = 'True'
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1').split(', ')
 
@@ -130,21 +127,3 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10,
 
 }
-
-sentry_sdk.init(
-    dsn="https://024b21fa73b945ee639d7e4f5c7eecc5@"
-        "o4505763973103616.ingest.sentry.io/4505763977756672",
-    integrations=[DjangoIntegration()],
-    # If you wish to associate users to errors (assuming you are using
-    # django.contrib.auth) you may enable sending PII data.
-    send_default_pii=True,
-    # Set traces_sample_rate to 1.0 to capture 100%
-    # of transactions for performance monitoring.
-    # We recommend adjusting this value in production.
-    traces_sample_rate=1.0,
-    # To set a uniform sample rate
-    # Set profiles_sample_rate to 1.0 to profile 100%
-    # of sampled transactions.
-    # We recommend adjusting this value in production,
-    profiles_sample_rate=1.0,
-)
