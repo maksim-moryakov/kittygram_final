@@ -26,6 +26,7 @@ services:
     command: cp -r /app/build/. /frontend_static/
     volumes:
       - static:/frontend_static
+    env_file: .env
  
   gateway:
     image: maksimmoryakov/kittygram_gateway
