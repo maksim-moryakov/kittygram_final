@@ -3,7 +3,7 @@ name: Main Kittygram
 on:
   push:
     branches:
-      - '*'
+      - 'main'
 
 jobs:
   tests:
@@ -16,9 +16,9 @@ jobs:
       postgres:
         image: postgres:13.10
         env:
-          POSTGRES_USER: dbuser
-          POSTGRES_PASSWORD: dbpass
-          POSTGRES_DB: db
+          POSTGRES_USER: dbnewuser
+          POSTGRES_PASSWORD: dbnewpass
+          POSTGRES_DB: dbnew
         ports:
           - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
@@ -35,9 +35,9 @@ jobs:
         pip install -r ./backend/requirements.txt 
     - name: Test with flake8 and django tests
       env:
-        POSTGRES_USER: dbuser
-        POSTGRES_PASSWORD: dbpass
-        POSTGRES_DB: db
+        POSTGRES_USER: dbnewuser
+        POSTGRES_PASSWORD: dbnewpass
+        POSTGRES_DB: dbnew
         DB_HOST: 127.0.0.1
         DB_PORT: 5432
         SECRET_KEY: 'my_secret_key'
@@ -164,7 +164,7 @@ jobs:
           sudo docker compose -f docker-compose.production.yml exec backend python manage.py migrate
           sudo docker compose -f docker-compose.production.yml exec backend python manage.py collectstatic
           sudo docker compose -f docker-compose.production.yml exec backend cp -r /app/collected_static/. /backend_static/
-          
+
   send_message:
     runs-on: ubuntu-latest
     needs: deploy
@@ -175,6 +175,4 @@ jobs:
         to: ${{ secrets.TELEGRAM_TO }}
         token: ${{ secrets.TELEGRAM_TOKEN }}
         message: |
-            🚀 Запушил: ${{ github.actor }}
-            📝 Сообщение коммита: ${{ github.event.commits[0].message }}
-            🔗 URL коммита: https://github.com/${{ github.repository }}/commit/${{ github.sha }}          
+            🚀 Запушил: ${{ github.actor }}   
